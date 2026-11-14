@@ -1,0 +1,557 @@
+/* Design responsive */
+
+/* Grands écrans (1200px et +) */
+@media (min-width: 1200px) {
+    h1 {
+        font-size: 3.5rem;
+    }
+    
+    .home-title {
+        font-size: 4rem;
+    }
+    
+    .letter-title {
+        font-size: 3rem;
+    }
+    
+    .love-letter-container,
+    .letters-container,
+    .gallery-container,
+    .quiz-container {
+        max-width: 1100px;
+    }
+}
+
+/* Tablettes (768–1199px) */
+@media (max-width: 1199px) {
+    h1 {
+        font-size: 2.2rem;
+    }
+    
+    .home-title {
+        font-size: 2.5rem;
+    }
+    
+    .letter-title {
+        font-size: 2rem;
+    }
+    
+    .letters-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+    
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
+
+/* Mobile paysage (576–767px) */
+@media (max-width: 767px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    h3 {
+        font-size: 1.2rem;
+    }
+    
+    .home-title {
+        font-size: 2rem;
+    }
+    
+    .home-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .letter-title {
+        font-size: 1.8rem;
+    }
+    
+    .btn-gold {
+        padding: 10px 24px;
+        font-size: 1rem;
+    }
+    
+    .btn-large {
+        padding: 14px 36px;
+        font-size: 1.1rem;
+    }
+    
+    .page {
+        padding: var(--spacing-md) var(--spacing-sm);
+    }
+    
+    /* Musique */
+    .music-control {
+        top: 10px;
+        right: 10px;
+    }
+    
+    #music-toggle {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+    
+    /* Enveloppe */
+    .envelope {
+        width: 250px;
+        height: 170px;
+    }
+    
+    /* Compte à rebours */
+    .countdown-timer {
+        font-size: 1.2rem;
+    }
+
+    /* Lettre */
+    .letter-paper {
+        padding: var(--spacing-md);
+    }
+    
+    .letter-content p {
+        font-size: 1rem;
+    }
+    
+    /* Grille des lettres */
+    .letters-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Galerie */
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Cadeau */
+    .gift-box {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .gift-body {
+        width: 150px;
+        height: 110px;
+    }
+    
+    .gift-lid {
+        width: 150px;
+        height: 40px;
+    }
+    
+    .heart-large {
+        font-size: 4rem;
+    }
+    
+    /* Fenêtre modale */
+    .modal-content {
+        padding: var(--spacing-md);
+        max-height: 85vh;
+    }
+    
+    /* Visionneuse */
+    .lightbox-close,
+    .lightbox-prev,
+    .lightbox-next {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    .lightbox-close {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .lightbox-prev {
+        left: 10px;
+    }
+    
+    .lightbox-next {
+        right: 10px;
+    }
+}
+
+/* Mobile portrait (< 576px) */
+@media (max-width: 575px) {
+    :root {
+        --spacing-xs: 0.4rem;
+        --spacing-sm: 0.8rem;
+        --spacing-md: 1.5rem;
+        --spacing-lg: 2rem;
+        --spacing-xl: 2.5rem;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    h3 {
+        font-size: 1.1rem;
+    }
+    
+    p {
+        font-size: 0.95rem;
+    }
+    
+    .home-title {
+        font-size: 1.8rem;
+    }
+    
+    .home-subtitle {
+        font-size: 1rem;
+    }
+    
+    .home-message {
+        padding: var(--spacing-sm);
+    }
+    
+    .home-message p {
+        font-size: 1rem;
+    }
+    
+    .letter-title {
+        font-size: 1.5rem;
+    }
+    
+    .btn-gold {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+    }
+    
+    .btn-large {
+        padding: 12px 28px;
+        font-size: 1rem;
+    }
+    
+    .page {
+        padding: var(--spacing-md) var(--spacing-xs);
+        min-height: 100vh;
+    }
+    
+    /* Musique */
+    #music-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    /* Enveloppe */
+    .envelope {
+        width: 220px;
+        height: 150px;
+    }
+    
+    .entry-name {
+        font-size: 1.5rem;
+    }
+    
+    .entry-message {
+        font-size: 0.95rem;
+    }
+    
+    /* Compte à rebours */
+    .countdown {
+        padding: var(--spacing-sm);
+    }
+
+    .countdown-label {
+        font-size: 0.9rem;
+    }
+
+    .countdown-timer {
+        font-size: 1rem;
+    }
+
+    /* Lettre */
+    .letter-paper {
+        padding: var(--spacing-sm);
+    }
+    
+    .letter-paper::after {
+        left: 26px;
+        right: 26px;
+    }
+    
+    .letter-content {
+        padding-left: 38px;
+        padding-right: var(--spacing-xs);
+    }
+    
+    .letter-content p {
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
+    
+    .letter-signature {
+        font-size: 0.95rem;
+    }
+    
+    .letter-actions {
+        flex-direction: column;
+    }
+    
+    .letter-actions .btn-gold {
+        width: 100%;
+    }
+    
+    /* Grille des lettres */
+    .letters-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+    
+    .letter-card {
+        padding: var(--spacing-sm);
+    }
+    
+    .letter-envelope {
+        font-size: 2.5rem;
+    }
+    
+    .letter-card h3 {
+        font-size: 1.1rem;
+    }
+    
+    .letter-card p {
+        font-size: 0.85rem;
+    }
+    
+    /* Galerie */
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-sm);
+    }
+    
+    .gallery-letter {
+        padding: var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+    
+    .gallery-actions {
+        flex-direction: column;
+    }
+    
+    .gallery-actions .btn-gold {
+        width: 100%;
+    }
+    
+    .quiz-score {
+        font-size: 1.2rem;
+    }
+    
+    /* Cadeau */
+    .gift-box {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .gift-body {
+        width: 120px;
+        height: 90px;
+    }
+    
+    .gift-lid {
+        width: 120px;
+        height: 30px;
+    }
+    
+    .heart-large {
+        font-size: 3rem;
+    }
+    
+    .surprise-instruction {
+        font-size: 1.1rem;
+    }
+    
+    .final-letter {
+        padding: var(--spacing-sm);
+    }
+    
+    .final-letter h1 {
+        font-size: 1.5rem;
+    }
+    
+    .final-letter p {
+        font-size: 0.95rem;
+    }
+    
+    .surprise-final-message {
+        font-size: 1.1rem;
+    }
+    
+    .surprise-actions {
+        flex-direction: column;
+    }
+    
+    .surprise-actions .btn-gold {
+        width: 100%;
+    }
+    
+    /* Fenêtre modale */
+    .modal-content {
+        padding: var(--spacing-sm);
+        max-height: 90vh;
+    }
+    
+    .modal-close {
+        top: var(--spacing-xs);
+        right: var(--spacing-xs);
+        font-size: 1.5rem;
+    }
+    
+    .letter-modal-body {
+        font-size: 0.95rem;
+    }
+    
+    /* Visionneuse */
+    .lightbox-close,
+    .lightbox-prev,
+    .lightbox-next {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .lightbox-close {
+        top: 5px;
+        right: 5px;
+    }
+    
+    .lightbox-prev {
+        left: 5px;
+    }
+    
+    .lightbox-next {
+        right: 5px;
+    }
+    
+    .lightbox-caption {
+        font-size: 0.9rem;
+    }
+}
+
+/* Très petits écrans (< 360px) */
+@media (max-width: 359px) {
+    h1 {
+        font-size: 1.3rem;
+    }
+    
+    .home-title {
+        font-size: 1.5rem;
+    }
+    
+    .envelope {
+        width: 180px;
+        height: 130px;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .btn-gold {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Optimisations tactiles */
+@media (hover: none) and (pointer: coarse) {
+    .btn-gold,
+    .letter-trigger,
+    .letter-card,
+    .gallery-item,
+    .gift-box {
+        -webkit-tap-highlight-color: rgba(212, 175, 98, 0.3);
+    }
+
+    .letter-trigger:hover,
+    .letter-card:hover,
+    .gallery-item:hover,
+    .gift-box:hover {
+        transform: none;
+    }
+
+    .letter-trigger:active,
+    .letter-card:active,
+    .gallery-item:active,
+    .gift-box:active {
+        transform: scale(0.98);
+    }
+}
+
+/* Orientation paysage */
+@media (max-height: 500px) and (orientation: landscape) {
+    .page {
+        padding: var(--spacing-sm);
+    }
+    
+    .letter-content {
+        max-height: 40vh;
+    }
+    
+    .gift-box {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .gift-body {
+        width: 100px;
+        height: 75px;
+    }
+    
+    .gift-lid {
+        width: 100px;
+        height: 25px;
+    }
+    
+    .heart-large {
+        font-size: 2.5rem;
+    }
+}
+
+/* Écrans haute densité */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .particle {
+        transform: translateZ(0);
+    }
+}
+
+/* Finitions mobile */
+@media (max-width: 575px) {
+    /* 16px minimum sur les champs : évite le zoom automatique d'iPhone */
+    .lock-input,
+    .question-answer {
+        font-size: 16px;
+    }
+
+    /* Indicateur de progression plus discret */
+    .progress-indicator {
+        bottom: 12px;
+        padding: 8px 14px;
+    }
+
+    .progress-dots {
+        gap: 6px;
+    }
+
+    .dot {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+@media (max-width: 359px) {
+    .memory-board {
+        gap: 6px;
+    }
+}

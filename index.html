@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pour Jeanne</title>
+    <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+    <link rel="apple-touch-icon" href="assets/icon-180.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#140d16">
+    <link rel="stylesheet" href="css/fonts.css">
+    <script src="assets/vendor/html2canvas.min.js"></script>
+    <script src="assets/vendor/jspdf.umd.min.js"></script>
+    <script src="assets/vendor/three.min.js"></script>
+    <link rel="stylesheet" href="assets/vendor/leaflet.min.css">
+    <script src="assets/vendor/leaflet.min.js"></script>
+    <script src="assets/vendor/topojson-client.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" focusable="false">
+        <symbol id="icon-heart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.3C7.4 16.8 3.8 13.7 3.8 9.9 3.8 7.5 5.7 5.6 8 5.6c1.6 0 3.1.8 4 2.1.9-1.3 2.4-2.1 4-2.1 2.3 0 4.2 1.9 4.2 4.3 0 3.8-3.6 6.9-8.2 10.4Z"/></g></symbol>
+        <symbol id="icon-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></g></symbol>
+        <symbol id="icon-image" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m5 18 5-5 3 3 3-3 3 3"/></g></symbol>
+        <symbol id="icon-mic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"/></g></symbol>
+        <symbol id="icon-palette" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.2 0 2-.9 2-2 0-.6-.3-1-.7-1.3-.4-.3-.7-.8-.7-1.4 0-1.1.9-2 2-2h1.7A4.3 4.3 0 0 0 21 11c0-4.4-4-8-9-8Z"/><circle cx="8" cy="10" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="16" cy="10" r="1"/></g></symbol>
+        <symbol id="icon-help" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 .8-1 1.7"/><path d="M12 17h.01"/></g></symbol>
+        <symbol id="icon-gift" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M12 10v10M4 14h16M12 10c-4 0-6-1.5-6-4 0-1.5 1-2.5 2.5-2.5 2 0 3.5 3 3.5 6.5Zm0 0c4 0 6-1.5 6-4 0-1.5-1-2.5-2.5-2.5-2 0-3.5 3-3.5 6.5Z"/></g></symbol>
+        <symbol id="icon-message" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 0 1-8 8c-1.2 0-2.4-.3-3.4-.8L4 20l.8-4.6A8 8 0 1 1 20 12Z"/></g></symbol>
+        <symbol id="icon-smile" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1.2 2.2 1.8 3.5 1.8s2.5-.6 3.5-1.8"/><path d="M9 9.5h.01M15 9.5h.01"/></g></symbol>
+        <symbol id="icon-shirt" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4 4 7l2 3 2-1v11h8V9l2 1 2-3-4-3a4 4 0 0 1-8 0Z"/></g></symbol>
+        <symbol id="icon-cake" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21h14M6 21v-7h12v7M5 14h14M12 14v7"/><path d="M12 14c-3 0-4-1.5-4-3 0-1 1-2 2-2 .8 0 1.4.5 2 1.2.6-.7 1.2-1.2 2-1.2 1 0 2 1 2 2 0 1.5-1 3-4 3Z"/></g></symbol>
+        <symbol id="icon-badge" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.2 2.2 4.8-5"/></g></symbol>
+        <symbol id="icon-sparkles" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 4 1.8 4.7 4.7 1.3-4.7 1.8L12 16.5l-1.8-4.7-4.7-1.3 4.7-1.3L12 4Z"/><path d="m19 15 .8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15Z"/></g></symbol>
+        <symbol id="icon-home" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m4 11 8-7 8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-6h4v6"/></g></symbol>
+        <symbol id="icon-music" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></g></symbol>
+        <symbol id="icon-pause" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="5" width="3.5" height="14" rx="1"/><rect x="13.5" y="5" width="3.5" height="14" rx="1"/></g></symbol>
+        <symbol id="icon-play" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5.5v13l11-6.5-11-6.5Z"/></g></symbol>
+        <symbol id="icon-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55h.01a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1Z"/></g></symbol>
+        <symbol id="icon-x" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></g></symbol>
+        <symbol id="icon-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></g></symbol>
+        <symbol id="icon-sprout" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M12 20v-8"/><path d="M12 12c0-4-3-6-7-6 0 4 3 6 7 6Z"/><path d="M12 12c0-4 3-6 7-6 0 4-3 6-7 6Z"/></g></symbol>
+        <symbol id="icon-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></g></symbol>
+    </svg>
+
+    <!-- Sortie du mode cinéma -->
+    <button id="cinema-exit-btn" class="cinema-exit-btn hidden" aria-label="Quitter le mode cinéma">
+        <svg class="icon" aria-hidden="true"><use href="#icon-x"/></svg>
+    </button>
+
+    <!-- Contrôle musical -->
+    <div id="music-control" class="music-control">
+        <button id="music-toggle" aria-label="Activer ou couper la musique">
+            <svg class="icon icon-lg" aria-hidden="true"><use href="#icon-music"/></svg>
+        </button>
+    </div>
+
+    <div id="music-prompt" class="music-prompt hidden" role="dialog" aria-live="polite">
+        <p>Veux-tu écouter la musique de fond ?</p>
+        <div class="music-prompt-actions">
+            <button id="music-prompt-yes" class="btn-gold">Oui</button>
+            <button id="music-prompt-no" class="btn-gold btn-secondary">Plus tard</button>
+        </div>
+    </div>
+
+    <!-- Paramètres -->
+    <button id="settings-toggle" class="settings-toggle" aria-label="Ouvrir les paramètres" aria-expanded="false">
+        <svg class="icon icon-lg" aria-hidden="true"><use href="#icon-gear"/></svg>
+    </button>
+
+    <div id="settings-panel" class="settings-panel hidden" role="dialog" aria-label="Paramètres du site">
+        <div class="settings-panel-header">
+            <h2>Paramètres</h2>
+            <button id="settings-close" class="settings-close" aria-label="Fermer les paramètres">
+                <svg class="icon" aria-hidden="true"><use href="#icon-x"/></svg>
+            </button>
+        </div>
+
+        <div class="settings-section">
+            <h3>Ambiance</h3>
+            <div class="palette-grid">
+                <button class="palette-btn" data-theme="rouge" aria-pressed="false"><span class="theme-dot theme-dot-rouge" aria-hidden="true"></span>Rouge</button>
+                <button class="palette-btn" data-theme="rose" aria-pressed="false"><span class="theme-dot theme-dot-rose" aria-hidden="true"></span>Rose</button>
+                <button class="palette-btn" data-theme="bleu" aria-pressed="false"><span class="theme-dot theme-dot-bleu" aria-hidden="true"></span>Bleu</button>
+                <button class="palette-btn" data-theme="lilas" aria-pressed="false"><span class="theme-dot theme-dot-lilas" aria-hidden="true"></span>Lilas</button>
+                <button class="palette-btn" data-theme="sauge" aria-pressed="false"><span class="theme-dot theme-dot-sauge" aria-hidden="true"></span>Sauge</button>
+                <button class="palette-btn" data-theme="dore" aria-pressed="false"><span class="theme-dot theme-dot-dore" aria-hidden="true"></span>Doré</button>
+                <button class="palette-btn" data-theme="noir" aria-pressed="false"><span class="theme-dot theme-dot-noir" aria-hidden="true"></span>Noir</button>
+            </div>
+
+            <div class="settings-volume">
+                <svg class="icon" aria-hidden="true"><use href="#icon-music"/></svg>
+                <span>Volume</span>
+                <input type="range" id="setting-volume" min="0" max="100" step="5" value="35" aria-label="Volume de la musique">
+                <span class="volume-value" id="volume-value">35%</span>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Affichage</h3>
+            <label class="settings-check">
+                <input type="checkbox" id="setting-motion">
+                Réduire les animations
+            </label>
+            <label class="settings-check">
+                <input type="checkbox" id="setting-particles" checked>
+                Particules d’arrière-plan
+            </label>
+            <label class="settings-check">
+                <input type="checkbox" id="setting-confetti" checked>
+                Confettis de célébration
+            </label>
+        </div>
+
+        <div class="settings-section">
+            <h3>Application</h3>
+            <button id="install-app-btn" class="palette-btn install-app-btn" type="button">
+                <svg class="icon" aria-hidden="true"><use href="#icon-download"/></svg>Installer l'app
+            </button>
+            <p class="settings-note" id="install-app-hint">Garde le site dans ta poche, comme une vraie app.</p>
+        </div>
+
+        <div class="settings-section">
+            <h3>Progression</h3>
+            <button id="reset-progress-btn" class="palette-btn reset-progress-btn" type="button">
+                <svg class="icon" aria-hidden="true"><use href="#icon-x"/></svg>Réinitialiser ma progression
+            </button>
+            <p class="settings-note">Efface les lettres lues, les scores des jeux et l'arbre. Le déverrouillage et tes réglages sont gardés.</p>
+        </div>
+
+        <p class="settings-note">La musique se lance avec le bouton en haut à droite.</p>
+    </div>
+
+    <!-- Particules d'arrière-plan -->
+    <div id="particles" class="particles"></div>
+    <canvas id="starfield" class="starfield" aria-hidden="true"></canvas>
+
+    <!-- Notifications -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Indicateur de progression -->
+    <div id="progress-indicator" class="progress-indicator">
+        <div class="progress-dots">
+            <span class="dot active" data-page="page-entry" title="Entrée"></span>
+            <span class="dot" data-page="page-home" title="Accueil"></span>
+            <span class="dot" data-page="page-timeline" title="Histoire"></span>
+            <span class="dot" data-page="page-love-letter" title="Lettre"></span>
+            <span class="dot" data-page="page-letters" title="Lettres"></span>
+            <span class="dot hidden" data-page="page-gallery" title="Galerie"></span>
+            <span class="dot" data-page="page-quiz" title="Jeu"></span>
+            <span class="dot" data-page="page-questions" title="Questions"></span>
+            <span class="dot" data-page="page-distance" title="Distance"></span>
+            <span class="dot" data-page="page-tree" title="Promesses"></span>
+            <span class="dot" data-page="page-surprise" title="Surprise"></span>
+        </div>
+    </div>
+
+    <!-- Verrou -->
+    <div id="lock-screen" class="lock-screen">
+        <div class="lock-card">
+            <svg class="icon icon-xl lock-icon" aria-hidden="true"><use href="#icon-heart"/></svg>
+            <h1 class="lock-title">Avant de commencer…</h1>
+            <p class="lock-text">Entre la date où tout a commencé entre nous.</p>
+            <p class="lock-format">JJ/MM/AAAA</p>
+            <form id="lock-form" class="lock-form">
+                <input id="lock-input" class="lock-input" type="text" inputmode="numeric" placeholder="__/__/____" autocomplete="off" aria-label="Date de notre histoire">
+                <button type="submit" class="btn-gold">Entrer</button>
+            </form>
+            <p id="lock-error" class="lock-error" aria-live="polite"></p>
+        </div>
+    </div>
+
+    <!-- Entrée secrète -->
+    <section id="page-entry" class="page active">
+        <div class="entry-container">
+            <div class="envelope-wrapper">
+                <div class="envelope" role="button" tabindex="0" aria-label="Ouvrir la surprise">
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-seal"><svg class="icon icon-lg" aria-hidden="true"><use href="#icon-mail"/></svg></div>
+                    <div class="envelope-content">
+                        <h1 class="entry-name">Jeanne</h1>
+                        <p class="entry-message">J'ai quelque chose à te dire…</p>
+                    </div>
+                </div>
+            </div>
+            <button id="entry-btn" class="btn-gold btn-large">
+                Ouvrir ta surprise <svg class="icon" aria-hidden="true"><use href="#icon-heart"/></svg>
+            </button>
+        </div>
+    </section>
+
+    <!-- Accueil -->
+    <section id="page-home" class="page">
+        <div class="home-container">
+            <div class="romantic-header">
+                <div class="heart-decoration"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-heart"/></svg></div>
+                <h1 class="home-title">Joyeux Anniversaire,<br>Ma Chouchou <svg class="icon icon-title" aria-hidden="true"><use href="#icon-heart"/></svg></h1>
+                <div class="heart-decoration"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-heart"/></svg></div>
+            </div>
+
+            <p class="home-subtitle">Aujourd'hui, ce petit univers est entièrement à toi.</p>
+
+            <figure class="photo-frame">
+                <img src="assets/images/jeanne.jpg" alt="Jeanne" onerror="this.closest('.photo-frame').classList.add('hidden')">
+                <figcaption class="photo-caption">Ma Jeanne</figcaption>
+            </figure>
+
+            <div class="home-message romantic-card">
+                <p class="message-intro">Ma Chouchou,</p>
+                <p>J'ai créé cet espace rien que pour toi. Chaque mot, chaque détail, chaque pensée a été choisi avec soin.</p>
+                <p>Je voulais te faire quelque chose de spécial, quelque chose qui te rappelle à quel point tu comptes pour moi.</p>
+                <p>Prends ton temps, découvre chaque page, et surtout : <strong>souris</strong>, parce que tu le mérites. <svg class="icon icon-inline" aria-hidden="true"><use href="#icon-heart"/></svg></p>
+                <p class="message-signature">Ton amoureux, qui t'aime profondément.</p>
+            </div>
+
+            <div class="romantic-features">
+                <div class="feature-highlight clickable" data-page="page-love-letter" role="button" tabindex="0" aria-label="Ouvrir les lettres d'amour">
+                    <span class="feature-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-heart"/></svg></span>
+                    <h3>Lettres d'amour</h3>
+                    <p>Des mots écrits avec le cœur</p>
+                </div>
+                <div class="feature-highlight clickable hidden" data-page="page-gallery" role="button" tabindex="0" aria-label="Ouvrir nos souvenirs">
+                    <span class="feature-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-image"/></svg></span>
+                    <h3>Nos souvenirs</h3>
+                    <p>Nos plus beaux moments ensemble</p>
+                </div>
+                <div class="feature-highlight clickable" data-page="page-timeline" role="button" tabindex="0" aria-label="Ouvrir mes mots">
+                    <span class="feature-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-mic"/></svg></span>
+                    <h3>Mes mots</h3>
+                    <p>Messages enregistrés pour toi</p>
+                </div>
+                <div class="feature-highlight clickable" data-page="page-letters" role="button" tabindex="0" aria-label="Ouvrir les petites lettres">
+                    <span class="feature-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-mail"/></svg></span>
+                    <h3>Petites lettres</h3>
+                    <p>Des messages cachés spéciaux</p>
+                </div>
+                <div class="feature-highlight clickable" data-page="page-quiz" role="button" tabindex="0" aria-label="Ouvrir le jeu">
+                    <span class="feature-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-help"/></svg></span>
+                    <h3>Petits jeux</h3>
+                    <p>Mémoire et vrai ou faux sur nous</p>
+                </div>
+                <div class="feature-highlight clickable" data-page="page-questions" role="button" tabindex="0" aria-label="Ouvrir les questions pour toi">
+                    <span class="feature-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-message"/></svg></span>
+                    <h3>Questions pour toi</h3>
+                    <p>Réponds à mes questions</p>
+                </div>
+                <div class="feature-highlight clickable" data-page="page-distance" role="button" tabindex="0" aria-label="Ouvrir la page distance">
+                    <span class="feature-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-globe"/></svg></span>
+                    <h3>Nous, à distance</h3>
+                    <p>Deux points sur le même globe</p>
+                </div>
+                <div class="feature-highlight clickable" data-page="page-tree" role="button" tabindex="0" aria-label="Ouvrir l'arbre à promesses">
+                    <span class="feature-badge hidden" id="tree-ready-badge">Prêt à arroser</span>
+                    <span class="feature-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-sprout"/></svg></span>
+                    <h3>Arbre à promesses</h3>
+                    <p>Une graine à faire grandir chaque semaine</p>
+                </div>
+                <div class="feature-highlight clickable" data-page="page-surprise" role="button" tabindex="0" aria-label="Ouvrir la surprise finale">
+                    <span class="feature-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-gift"/></svg></span>
+                    <h3>Surprise finale</h3>
+                    <p>Un cadeau spécial</p>
+                </div>
+            </div>
+
+            <div class="countdown romantic-countdown">
+                <div class="countdown-label">Prochain anniversaire dans :</div>
+                <div class="countdown-timer" id="countdown-timer">
+                    J-0
+                </div>
+                <p class="days-together" id="days-together"></p>
+            </div>
+
+            <p id="progress-summary" class="progress-summary" aria-live="polite"></p>
+
+            <button id="discover-btn" class="btn-gold btn-large romantic-btn">
+                <svg class="icon" aria-hidden="true"><use href="#icon-sparkles"/></svg> Découvrir notre histoire ensemble <svg class="icon" aria-hidden="true"><use href="#icon-sparkles"/></svg>
+            </button>
+        </div>
+    </section>
+
+    <!-- Nos mots et notre histoire -->
+    <section id="page-timeline" class="page">
+        <div class="story-scroll-container">
+            <h1 class="section-title">Mes mots pour toi <svg class="icon icon-title" aria-hidden="true"><use href="#icon-mic"/></svg></h1>
+            <p class="section-subtitle">Des messages et des souvenirs à redécouvrir ensemble</p>
+
+            <div class="feature-grid feature-grid-single">
+                <article class="feature-card"><span class="feature-card-icon"><svg class="icon icon-lg" aria-hidden="true"><use href="#icon-mic"/></svg></span><h3>Messages vocaux</h3><p>Des messages enregistrés avec tout mon cœur.</p>
+                <div class="voice-messages">
+                    <div class="voice-item">
+                        <h4><svg class="icon" aria-hidden="true"><use href="#icon-mic"/></svg> Pour ton anniversaire</h4>
+                        <div class="voice-player">
+                            <button class="voice-play" type="button" aria-label="Écouter le message">
+                                <svg class="icon" aria-hidden="true"><use href="#icon-play"/></svg>
+                            </button>
+                            <div class="voice-wave" aria-hidden="true"></div>
+                            <span class="voice-time">0:00</span>
+                        </div>
+                        <audio class="voice-audio" preload="metadata">
+                            <source src="assets/audio/voice-message-1.mp3" type="audio/mpeg">
+                            Ton navigateur ne supporte pas l'audio.
+                        </audio>
+                    </div>
+                    <div class="voice-item">
+                        <h4><svg class="icon" aria-hidden="true"><use href="#icon-mic"/></svg> Un message d'amour</h4>
+                        <div class="voice-player">
+                            <button class="voice-play" type="button" aria-label="Écouter le message">
+                                <svg class="icon" aria-hidden="true"><use href="#icon-play"/></svg>
+                            </button>
+                            <div class="voice-wave" aria-hidden="true"></div>
+                            <span class="voice-time">0:00</span>
+                        </div>
+                        <audio class="voice-audio" preload="metadata">
+                            <source src="assets/audio/voice-message-2.mp3" type="audio/mpeg">
+                            Ton navigateur ne supporte pas l'audio.
+                        </audio>
+                    </div>
+                </div>
+                </article>
+            </div>
+
+            <h2 class="timeline-title">Notre Histoire</h2>
+            <div class="story-scroll">
+                <div class="story-card">
+                    <div class="story-date">Snapchat</div>
+                    <div class="story-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-message"/></svg></div>
+                    <div class="story-content">
+                        <h3>Le début</h3>
+                        <p>Tout a commencé par un simple message. À l'époque, on était loin d'imaginer que deux personnes qui se connaissaient à peine allaient finir par prendre une place aussi importante dans la vie l'une de l'autre.</p>
+                        <button class="letter-trigger" data-letter="letter-1" aria-label="Ouvrir la lettre"><svg class="icon" aria-hidden="true"><use href="#icon-mail"/></svg></button>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-date">Opps</div>
+                    <div class="story-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-smile"/></svg></div>
+                    <div class="story-content">
+                        <h3>L'époque Opps</h3>
+                        <p>Nos petites taquineries, nos délires et cette complicité qui grandissait sans qu'on s'en rende vraiment compte. Avant d'être un couple, on construisait déjà quelque chose de précieux : une belle amitié.</p>
+                        <button class="letter-trigger" data-letter="letter-3" aria-label="Ouvrir la lettre"><svg class="icon" aria-hidden="true"><use href="#icon-mail"/></svg></button>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-date">Le maillot</div>
+                    <div class="story-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-shirt"/></svg></div>
+                    <div class="story-content">
+                        <h3>Le cadeau promis</h3>
+                        <p>Le maillot était surtout un prétexte pour enfin te voir en vrai.</p>
+                        <div class="souvenir-card" role="button" tabindex="0" data-letter="letter-2">
+                            <div class="souvenir-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-gift"/></svg></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-date">Coup de foudre</div>
+                    <div class="story-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-heart"/></svg></div>
+                    <div class="story-content">
+                        <h3>La rencontre</h3>
+                        <p>Un moment trop court, quelques regards et un sourire que je n'ai pas oublié en repartant.</p>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-date">Fête du bac</div>
+                    <div class="story-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-cake"/></svg></div>
+                    <div class="story-content">
+                        <h3>La fête</h3>
+                        <p>Sidi qui te demandait déjà si j'étais ton mec. Tout le monde le savait sauf nous mdr.</p>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-date">17 sept 2026</div>
+                    <div class="story-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-badge"/></svg></div>
+                    <div class="story-content">
+                        <h3>Officialisation</h3>
+                        <p>Le jour où notre histoire a pris une nouvelle forme. Nous étions officiellement ensemble.</p>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-date">Aujourd'hui</div>
+                    <div class="story-icon"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-sparkles"/></svg></div>
+                    <div class="story-content">
+                        <h3>Notre présent</h3>
+                        <p>Malgré la distance et les défis, on continue d'avancer ensemble, avec la même envie de construire notre histoire.</p>
+                        <button class="letter-trigger" data-letter="letter-5" aria-label="Ouvrir la lettre"><svg class="icon" aria-hidden="true"><use href="#icon-mail"/></svg></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="story-actions">
+                <button id="to-love-letter-btn" class="btn-gold">
+                    Lire ma lettre <svg class="icon" aria-hidden="true"><use href="#icon-heart"/></svg>
+                </button>
+                <button id="timeline-to-letters-btn" class="btn-gold btn-secondary">
+                    Voir les petites lettres <svg class="icon" aria-hidden="true"><use href="#icon-mail"/></svg>
+                </button>
+                <button id="timeline-to-gallery-btn" class="btn-gold btn-secondary hidden">
+                    Voir la galerie <svg class="icon" aria-hidden="true"><use href="#icon-image"/></svg>
+                </button>
+                <button id="timeline-to-distance-btn" class="btn-gold btn-secondary">
+                    Nous, à distance <svg class="icon" aria-hidden="true"><use href="#icon-globe"/></svg>
+                </button>
+                <button id="timeline-to-home-btn" class="btn-gold btn-secondary">
+                    Revenir à l'accueil <svg class="icon" aria-hidden="true"><use href="#icon-home"/></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Grande lettre -->
+    <section id="page-love-letter" class="page">
+        <div class="love-letter-container">
+            <div class="letter-paper">
+                <h1 class="letter-title">À toi, ma Chouchou ❤️</h1>
+                
+                <div class="letter-content" id="main-letter">
+                    <p>Jeanne,</p>
+                    <p>Joyeux anniversaire, mon cœur. ❤️</p>
+                    <p>Aujourd'hui, c'est ta journée, et je voulais faire quelque chose de spécial pour toi. Je ne voulais pas simplement t'envoyer un petit message de joyeux anniversaire comme si c'était une journée ordinaire. J'avais envie de prendre le temps de créer quelque chose qui te ressemble un peu, quelque chose que tu pourrais garder et relire, et qui te rappellerait que, quelque part, il y a un garçon qui pense à toi et qui avait envie de te faire plaisir.</p>
+                    <p>Quand je repense à notre histoire, je souris en me disant que tout a commencé d'une manière assez simple. Nous étions amis sur Snapchat depuis longtemps, mais nous ne nous connaissions pas vraiment. Nous pouvions être là dans les contacts de l'autre sans savoir que nous allions finir par prendre une place aussi particulière dans nos vies.</p>
+                    <p>Puis, un jour, je t'ai envoyé ce premier message. Je ne me rappelle pas exactement comment toute notre conversation a commencé, mais je sais que nous avons fini par très bien nous parler. Petit à petit, tu es devenue quelqu'un avec qui je pouvais discuter, plaisanter et partager mon temps. Avant même que nous soyons ensemble, nous avions déjà construit notre petite complicité.</p>
+                    <p>Et comment oublier l'époque où tu m'appelais « Opps » ? 😂❤️ Tu disais que, chaque fois que j'arrivais, c'était pour parler, parler encore et te sortir des choses qui finissaient parfois par t'énerver. Pourtant, nous avons gardé ce surnom tous les deux. Aujourd'hui, quand j'y pense, je me dis que ces petites habitudes font partie de ce qui rend notre histoire différente des autres.</p>
+                    <p>À ce moment-là, nous étions amis, presque meilleurs amis. Je ne savais pas encore tout ce que j'allais ressentir pour toi. Je ne savais pas non plus qu'une rencontre allait rester aussi présente dans ma mémoire.</p>
+                    <p>Je me souviens du jour où je suis venu te donner le maillot que je t'avais promis après ton bac. Je suis arrivé à moto, et nous étions tous les deux timides. Nous n'avons pas eu beaucoup de temps pour parler, et la rencontre a été assez courte. Mais ce que tu ne sais peut-être pas, c'est ce qui s'est passé dans ma tête après mon départ.</p>
+                    <p>En repartant, je pensais à toi. J'avais un sourire que je n'arrivais pas à enlever. Je repensais à cette première rencontre en vrai, à ton visage, au fait que je venais enfin de voir en personne quelqu'un avec qui je partageais déjà tant de conversations.</p>
+                    <p>Je ne sais pas comment expliquer exactement ce moment, mais je sais qu'il m'a marqué. C'était comme si je venais de découvrir une autre dimension de cette personne que je connaissais déjà à travers nos messages. Et, sans même avoir eu le temps de te parler autant que je l'aurais voulu, j'étais déjà complètement sous ton charme.</p>
+                    <p>Puis il y a eu la fête de ton bac. Je suis venu avec mes amis, et apparemment, nous donnions déjà l'impression d'être en couple. 😂 Je repense encore au moment où Sidi t'a demandé si j'étais ton mec. À ce moment-là, nous n'étions pas encore officiellement ensemble, mais les gens autour de nous semblaient déjà se poser la question.</p>
+                    <p>Et finalement, le 17 septembre 2026, selon la date que nous avons retenue, notre relation a commencé officiellement. Ce jour est important pour moi parce qu'il représente le moment où notre histoire a pris une autre forme. Nous n'étions plus seulement deux amis qui se parlaient beaucoup : nous avions décidé de donner une place différente à ce que nous ressentions.</p>
+                    <p>C'est aussi à partir de cette période que j'ai commencé à t'appeler Chouchou. Je sais que tu me disais que tu ne voulais pas forcément de ce surnom parce que tes parents t'appelaient déjà comme ça, et que tu voulais que je trouve quelque chose de plus romantique. 😂❤️ Je ne sais pas si j'ai trouvé le surnom parfait, mais je sais que lorsque je t'appelle Chouchou, il y a toute mon affection derrière ce mot.</p>
+                    <p>Ma Chouchou, ce que je veux que tu comprennes aujourd'hui, c'est que tu n'es pas devenue importante pour moi en une seule journée. Notre histoire s'est construite petit à petit : dans nos conversations, dans nos taquineries, dans les moments où nous étions simplement amis, puis dans cette rencontre qui m'a fait ressentir quelque chose de différent.</p>
+                    <p>Je sais aussi que notre histoire n'est pas toujours simple. Nous avons des questions auxquelles nous devons réfléchir, notamment lorsque nous pensons à notre avenir et aux difficultés que nos différences religieuses pourraient poser auprès de nos familles. Nous savons que nous ne voulons pas simplement jouer avec les sentiments de l'autre. Nous parlons d'un avenir sérieux, et cela signifie aussi que nous devons pouvoir parler honnêtement des sujets difficiles.</p>
+                    <p>Je ne veux pas te promettre que tout sera facile ni prétendre que l'amour suffit à résoudre chaque problème. Je veux plutôt que nous puissions continuer à nous comprendre, à nous parler avec sincérité et à réfléchir à notre avenir avec maturité. Je veux que tu saches que je prends ce que nous vivons au sérieux, et que je ne considère pas notre relation comme quelque chose de sans importance.</p>
+                    <p>Même si nous ne nous sommes vus que quelques fois en personne, j'ai envie de continuer à apprendre à te connaître. J'ai envie de découvrir encore davantage ce qui te fait rire, ce qui te rend heureuse, ce qui te préoccupe, ce dont tu rêves et ce que tu souhaites accomplir. Je veux que notre histoire soit faite de vrais moments, de conversations sincères et d'efforts des deux côtés.</p>
+                    <p>Je sais que je ne suis pas parfait. Je ne trouverai pas toujours les mots les plus romantiques, et je ne saurai peut-être pas toujours exprimer exactement ce que je ressens. Mais je veux apprendre. Je veux apprendre à mieux te comprendre, à te montrer mon affection de la manière qui te fait du bien et à faire attention à ce qui compte pour toi.</p>
+                    <p>Je veux que tu puisses être toi-même avec moi. Tu n'as pas besoin de toujours être forte, de toujours sourire ou de toujours avoir les réponses. Tu as le droit d'avoir des journées difficiles, de douter et de prendre du temps pour toi. Je souhaite que notre relation soit un endroit où nous pouvons nous parler avec respect, nous écouter et nous soutenir sans nous demander d'être parfaits.</p>
+                    <p>Pour ton anniversaire, je te souhaite la santé, la paix, la réussite et beaucoup de bonheur. Je te souhaite de réaliser les rêves qui te tiennent à cœur, de rencontrer de belles occasions, de progresser dans ce que tu entreprends et de pouvoir être fière de la personne que tu deviens.</p>
+                    <p>Je te souhaite de rire sincèrement, de vivre de beaux moments et de ne jamais oublier ta valeur, même lorsque les choses ne se passent pas comme tu le voudrais.</p>
+                    <p>Et si je peux contribuer à rendre certaines de tes journées plus belles, à te faire sourire ou à t'aider à te rappeler que tu comptes, alors cela me fera plaisir.</p>
+                    <p>Je suis heureux que nos chemins se soient croisés, même si cela a commencé par un simple contact Snapchat. Je suis heureux que nous ayons eu le temps de devenir proches avant de commencer notre relation. Je suis heureux d'avoir pu te rencontrer en vrai et d'avoir découvert que derrière nos conversations, il y avait une personne qui allait compter autant pour moi.</p>
+                    <p>Si j'ai créé ce site, c'est parce que je voulais te consacrer du temps. Je voulais que tu découvres notre histoire racontée avec mes yeux, que tu retrouves certains de nos souvenirs et que tu lises des choses que je ne prends peut-être pas toujours assez le temps de te dire.</p>
+                    <p>Je ne sais pas exactement ce que l'avenir nous réserve, mais je sais que j'ai envie de continuer à découvrir cette histoire avec toi. J'espère que nous pourrons continuer à grandir, à apprendre, à construire des souvenirs et à avancer avec respect et sincérité.</p>
+                    <p>Alors aujourd'hui, ma Chouchou, profite de ta journée. Souris, célèbre cette nouvelle année de ta vie et rappelle-toi que tu es une personne précieuse.</p>
+                    <p>Joyeux anniversaire, Jeanne. Joyeux anniversaire, mon Chouchou. ❤️</p>
+                    <p>Merci d'avoir pris une place aussi particulière dans mon histoire.</p>
+                    <p>Je t'aime, Chouchou. ❤️</p>
+                    <p class="letter-signature">Avec tout mon amour,<br>Ton amoureux.</p>
+                </div>
+
+                <div class="letter-actions">
+                    <button id="download-pdf-btn" class="download-pdf-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.707.293H19a2 2 0 012-2z"></path>
+                        </svg>
+                        Télécharger en PDF
+                    </button>
+                    <button id="to-gallery-btn" class="btn-gold hidden">
+                        Voir nos souvenirs ❤️
+                    </button>
+                    <button id="love-letter-to-letters-btn" class="btn-gold btn-secondary">
+                        Voir les petites lettres <svg class="icon" aria-hidden="true"><use href="#icon-mail"/></svg>
+                    </button>
+                    <button id="letter-to-distance-btn" class="btn-gold btn-secondary">
+                        Nous, à distance <svg class="icon" aria-hidden="true"><use href="#icon-globe"/></svg>
+                    </button>
+                    <button id="love-letter-to-home-btn" class="btn-gold btn-secondary">
+                        Revenir à l'accueil <svg class="icon" aria-hidden="true"><use href="#icon-home"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Petites lettres -->
+    <section id="page-letters" class="page">
+        <div class="letters-container">
+            <h1 class="section-title">Mes Petites Lettres</h1>
+            <p class="section-subtitle">Quelques mots cachés, juste pour toi</p>
+
+            <div class="letters-grid">
+                <div class="letter-card" role="button" tabindex="0" data-letter="letter-1">
+                    <div class="letter-envelope"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-mail"/></svg></div>
+                    <h3>Notre petit secret</h3>
+                    <p>Ce que je ne te dis pas assez souvent…</p>
+                </div>
+
+                <div class="letter-card" role="button" tabindex="0" data-letter="letter-2">
+                    <div class="letter-envelope"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-mail"/></svg></div>
+                    <h3>Le jour où je t'ai vue en vrai</h3>
+                    <p>Notre première rencontre…</p>
+                </div>
+
+                <div class="letter-card" role="button" tabindex="0" data-letter="letter-3">
+                    <div class="letter-envelope"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-mail"/></svg></div>
+                    <h3>Tes messages</h3>
+                    <p>Tes petits mots qui egayent mes journées…</p>
+                </div>
+
+                <div class="letter-card" role="button" tabindex="0" data-letter="letter-4">
+                    <div class="letter-envelope"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-mail"/></svg></div>
+                    <h3>Un rêve avec toi</h3>
+                    <p>Le jour où j'ai rêvé de nous…</p>
+                </div>
+
+                <div class="letter-card" role="button" tabindex="0" data-letter="letter-5">
+                    <div class="letter-envelope"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-mail"/></svg></div>
+                    <h3>Une confession</h3>
+                    <p>Ce que je n'avais jamais avoué…</p>
+                </div>
+
+                <div class="letter-card" role="button" tabindex="0" data-letter="letter-6">
+                    <div class="letter-envelope"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-mail"/></svg></div>
+                    <h3>Ce n'est pas un jeu</h3>
+                    <p>Une histoire vraie, avec toi…</p>
+                </div>
+
+                <div class="letter-card" role="button" tabindex="0" data-letter="letter-7">
+                    <div class="letter-envelope"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-mail"/></svg></div>
+                    <h3>Une petite attention pour toi</h3>
+                    <p>Ce site est pour toi…</p>
+                </div>
+            </div>
+
+            <div class="letters-actions">
+                <button id="letters-to-gallery-btn" class="btn-gold btn-secondary hidden">
+                    Voir la galerie <svg class="icon" aria-hidden="true"><use href="#icon-image"/></svg>
+                </button>
+                <button id="letters-to-quiz-btn" class="btn-gold">
+                    Continuer vers le jeu <svg class="icon" aria-hidden="true"><use href="#icon-help"/></svg>
+                </button>
+                <button id="letters-to-distance-btn" class="btn-gold btn-secondary">
+                    Nous, à distance <svg class="icon" aria-hidden="true"><use href="#icon-globe"/></svg>
+                </button>
+                <button id="letters-to-home-btn" class="btn-gold btn-secondary">
+                    Revenir à l'accueil <svg class="icon" aria-hidden="true"><use href="#icon-home"/></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galerie -->
+    <section id="page-gallery" class="page hidden">
+        <div class="gallery-container">
+            <h1 class="section-title">Notre Album</h1>
+            <p class="section-subtitle">L'amour à distance, en images</p>
+
+            <div class="gallery-grid">
+                <div class="gallery-item is-placeholder" role="button" tabindex="0" data-caption="Le premier Opps" data-icon="icon-message">
+                    <div class="gallery-ph"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-message"/></svg><span>Le premier Opps</span></div>
+                </div>
+                <div class="gallery-item is-placeholder" role="button" tabindex="0" data-caption="Le premier appel" data-icon="icon-mic">
+                    <div class="gallery-ph"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-mic"/></svg><span>Le premier appel</span></div>
+                </div>
+                <div class="gallery-item is-placeholder" role="button" tabindex="0" data-caption="La première photo envoyée" data-icon="icon-image">
+                    <div class="gallery-ph"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-image"/></svg><span>La première photo envoyée</span></div>
+                </div>
+                <div class="gallery-item is-placeholder" role="button" tabindex="0" data-caption="Les lettres qui traversent" data-icon="icon-mail">
+                    <div class="gallery-ph"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-mail"/></svg><span>Les lettres qui traversent</span></div>
+                </div>
+                <div class="gallery-item is-placeholder" role="button" tabindex="0" data-caption="Notre playlist commune" data-icon="icon-music">
+                    <div class="gallery-ph"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-music"/></svg><span>Notre playlist commune</span></div>
+                </div>
+                <div class="gallery-item is-placeholder" role="button" tabindex="0" data-caption="Notre prochaine ville" data-icon="icon-sparkles">
+                    <div class="gallery-ph"><svg class="icon icon-xl" aria-hidden="true"><use href="#icon-sparkles"/></svg><span>Notre prochaine ville</span></div>
+                </div>
+            </div>
+
+            <div class="gallery-letter">
+                <p>Ma Chouchou,</p>
+                <p>Toutes les belles choses d'une histoire ne tiennent pas forcément dans une photo. Certaines se trouvent dans une conversation, un fou rire, une petite habitude ou un moment qu'on garde dans sa tête.</p>
+                <p>J'aime l'idée de pouvoir rassembler ici quelques souvenirs de nous, même si notre histoire est encore jeune et que nous avons encore beaucoup de choses à découvrir.</p>
+                <p>J'espère qu'avec le temps, cette galerie pourra accueillir encore plus de moments heureux et de souvenirs que nous serons contents de revoir.</p>
+                <p>Ce n'est qu'un début, Chouchou. <svg class="icon icon-inline" aria-hidden="true"><use href="#icon-heart"/></svg></p>
+            </div>
+
+            <div class="gallery-actions">
+                <button id="to-letters-btn" class="btn-gold btn-secondary">
+                    Voir les lettres <svg class="icon" aria-hidden="true"><use href="#icon-mail"/></svg>
+                </button>
+                <button id="gallery-to-quiz-btn" class="btn-gold">
+                    Continuer vers le jeu <svg class="icon" aria-hidden="true"><use href="#icon-help"/></svg>
+                </button>
+                <button id="gallery-to-distance-btn" class="btn-gold btn-secondary">
+                    Nous, à distance <svg class="icon" aria-hidden="true"><use href="#icon-globe"/></svg>
+                </button>
+                <button id="gallery-to-home-btn" class="btn-gold btn-secondary">
+                    Revenir à l'accueil <svg class="icon" aria-hidden="true"><use href="#icon-home"/></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jeux -->
+    <section id="page-quiz" class="page">
+        <div class="quiz-container">
+            <h1 class="section-title">Petits jeux pour toi <svg class="icon icon-title" aria-hidden="true"><use href="#icon-heart"/></svg></h1>
+            <p class="section-subtitle">Deux jeux rien que pour nous</p>
+
+            <div class="game-tabs" role="tablist" aria-label="Choisir un jeu">
+                <button class="game-tab active" data-game-tab="memory" type="button" role="tab" aria-selected="true">Jeu de mémoire</button>
+                <button class="game-tab" data-game-tab="truth" type="button" role="tab" aria-selected="false">Vrai ou faux</button>
+            </div>
+
+            <div id="memory-panel">
+            <div id="quiz-content" class="memory-game">
+                <div class="memory-status">
+                    Paires trouvées : <span id="memory-pairs">0</span>/6 • Coups : <span id="memory-moves">0</span>
+                </div>
+                <div id="memory-board" class="memory-board"></div>
+            </div>
+
+            <div id="quiz-result" class="quiz-result hidden">
+                <h2>Tous les symboles sont retrouvés !</h2>
+                <p>Bravo, Chouchou. Toutes nos cartes sont retrouvées. Mdr j'avais pas d'idée pour le jeu mais Bravo bb. <svg class="icon icon-inline" aria-hidden="true"><use href="#icon-heart"/></svg></p>
+                <p class="quiz-score">Coups : <span id="final-score">0</span> • Temps : <span id="final-time">0 s</span></p>
+                <button id="restart-quiz-btn" class="btn-gold btn-secondary">
+                    Recommencer
+                </button>
+                <button id="quiz-to-questions-btn" class="btn-gold btn-secondary">
+                    Répondre à mes questions <svg class="icon" aria-hidden="true"><use href="#icon-help"/></svg>
+                </button>
+                <button id="to-surprise-btn" class="btn-gold">
+                    Découvrir la surprise finale <svg class="icon" aria-hidden="true"><use href="#icon-gift"/></svg>
+                </button>
+                <button id="quiz-to-distance-btn" class="btn-gold btn-secondary">
+                    Nous, à distance <svg class="icon" aria-hidden="true"><use href="#icon-globe"/></svg>
+                </button>
+                <button id="quiz-to-home-btn" class="btn-gold btn-secondary">
+                    Revenir à l'accueil <svg class="icon" aria-hidden="true"><use href="#icon-home"/></svg>
+                </button>
+            </div>
+            </div>
+
+            <div id="truth-panel" class="hidden">
+                <div id="truth-game">
+                    <div class="memory-status">
+                        Question <span id="truth-index">1</span>/<span id="truth-total">17</span> • Bonnes réponses : <span id="truth-score">0</span>
+                    </div>
+                    <div class="truth-card">
+                        <p id="truth-question" class="truth-question"></p>
+                        <div class="truth-actions">
+                            <button id="truth-true" class="btn-gold" type="button">C'est vrai</button>
+                            <button id="truth-false" class="btn-gold btn-secondary" type="button">C'est faux</button>
+                        </div>
+                    </div>
+                    <p id="truth-feedback" class="truth-feedback" aria-live="polite"></p>
+                </div>
+
+                <div id="truth-result" class="quiz-result hidden">
+                    <h2>Notre bilan</h2>
+                    <p id="truth-final-text"></p>
+                    <p class="quiz-score"><span id="truth-final-score">0</span>/<span id="truth-final-total">17</span></p>
+                    <button id="restart-truth-btn" class="btn-gold btn-secondary">
+                        Recommencer
+                    </button>
+                    <button id="truth-to-questions-btn" class="btn-gold btn-secondary">
+                        Répondre à mes questions <svg class="icon" aria-hidden="true"><use href="#icon-help"/></svg>
+                    </button>
+                    <button id="truth-to-distance-btn" class="btn-gold btn-secondary">
+                        Nous, à distance <svg class="icon" aria-hidden="true"><use href="#icon-globe"/></svg>
+                    </button>
+                    <button id="truth-to-home-btn" class="btn-gold btn-secondary">
+                        Revenir à l'accueil <svg class="icon" aria-hidden="true"><use href="#icon-home"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Questions pour toi -->
+    <section id="page-questions" class="page">
+        <div class="questions-container">
+            <h1 class="section-title">Questions pour toi <svg class="icon icon-title" aria-hidden="true"><use href="#icon-heart"/></svg></h1>
+            <p class="section-subtitle">Un petit formulaire rien que pour toi</p>
+            <p class="questions-note">Réponds avec ton cœur, puis envoie-moi tout.</p>
+
+            <div class="questions-grid" id="questions-grid"></div>
+
+            <div class="questions-actions">
+                <button id="questions-send-btn" class="btn-gold">
+                    <span class="send-label">Envoyer mes réponses</span> <svg class="icon" aria-hidden="true"><use href="#icon-mail"/></svg>
+                </button>
+                <button id="questions-clear-btn" class="btn-gold btn-secondary">
+                    Tout effacer
+                </button>
+                <button id="questions-to-quiz-btn" class="btn-gold">
+                    Continuer vers le jeu <svg class="icon" aria-hidden="true"><use href="#icon-help"/></svg>
+                </button>
+                <button id="questions-to-distance-btn" class="btn-gold">
+                    Nous, à distance <svg class="icon" aria-hidden="true"><use href="#icon-globe"/></svg>
+                </button>
+                <button id="questions-to-home-btn" class="btn-gold btn-secondary">
+                    Revenir à l'accueil <svg class="icon" aria-hidden="true"><use href="#icon-home"/></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nous, à distance -->
+    <section id="page-distance" class="page">
+        <div class="distance-container">
+            <h1 class="section-title">Nous, à distance <svg class="icon icon-title" aria-hidden="true"><use href="#icon-globe"/></svg></h1>
+            <p class="section-subtitle">Deux points sur la même planète, un seul cœur</p>
+
+            <div class="distance-card">
+                <div class="distance-stats">
+                    <div class="distance-value" id="distance-value">…</div>
+                    <p class="distance-label">kilomètres nous séparent aujourd'hui</p>
+                    <p class="distance-message" id="distance-message"></p>
+                </div>
+
+                <div class="views-stack">
+                    <div class="globe-wrap view-off" id="globe-view">
+                        <div id="globe-container"></div>
+                        <div class="globe-label globe-label-lui" id="label-lui">Moi</div>
+                        <div class="globe-label globe-label-elle" id="label-elle">Toi</div>
+                        <button id="globe-rotate-btn" class="globe-rotate-btn" type="button" aria-pressed="true" aria-label="Activer ou couper la rotation automatique">
+                            <svg class="icon" aria-hidden="true"><use href="#icon-globe"/></svg>
+                        </button>
+                        <p class="globe-hint">Glisse pour tourner · clique un point pour y zoomer</p>
+                    </div>
+
+                    <div class="map-wrap" id="map-view">
+                        <div id="satellite-map"></div>
+                        <canvas id="offline-map" class="offline-map hidden" aria-hidden="true"></canvas>
+                        <p class="map-hint">Pince ou molette pour zoomer — dézoome pour voir le globe</p>
+                    </div>
+                </div>
+
+                <div class="distance-legend">
+                    <span class="legend-item"><i class="legend-dot legend-dot-lui" aria-hidden="true"></i>Moi</span>
+                    <span class="legend-item"><i class="legend-dot legend-dot-elle" aria-hidden="true"></i>Toi</span>
+                </div>
+            </div>
+
+            <div class="distance-actions">
+                <button id="distance-to-questions-btn" class="btn-gold btn-secondary">
+                    Questions pour toi
+                </button>
+                <button id="distance-to-surprise-btn" class="btn-gold">
+                    Découvrir la surprise <svg class="icon" aria-hidden="true"><use href="#icon-gift"/></svg>
+                </button>
+                <button id="distance-to-tree-btn" class="btn-gold btn-secondary">
+                    Arbre à promesses <svg class="icon" aria-hidden="true"><use href="#icon-sprout"/></svg>
+                </button>
+                <button id="distance-to-home-btn" class="btn-gold btn-secondary">
+                    Revenir à l'accueil <svg class="icon" aria-hidden="true"><use href="#icon-home"/></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Arbre à promesses -->
+    <section id="page-tree" class="page">
+        <div class="tree-container">
+            <h1 class="section-title">L'arbre à promesses <svg class="icon icon-title" aria-hidden="true"><use href="#icon-sprout"/></svg></h1>
+            <p class="section-subtitle">Une graine que nous faisons grandir, une semaine à la fois</p>
+
+            <div class="tree-card">
+                <div class="tree-stage" id="tree-stage" data-stage="0">
+                    <svg class="promise-tree" viewBox="0 0 200 240" aria-hidden="true">
+                        <ellipse class="tree-ground" cx="100" cy="226" rx="72" ry="9"/>
+                        <g class="t-seed">
+                            <ellipse class="seed" cx="100" cy="222" rx="8" ry="5.5"/>
+                            <path class="seed-sprout" d="M100 218 q-7 -12 1 -20"/>
+                        </g>
+                        <g class="t-sprout">
+                            <path class="sprout-stem" d="M100 224 C 98 205, 102 195, 100 180"/>
+                            <path class="sprout-leaf left" d="M100 196 C 88 192, 82 182, 84 172 C 94 176, 99 184, 100 196 Z"/>
+                            <path class="sprout-leaf right" d="M100 190 C 112 186, 118 176, 116 166 C 106 170, 101 178, 100 190 Z"/>
+                        </g>
+                        <g class="t-trunk">
+                            <path class="trunk" d="M92 226 C 90 200, 94 180, 92 158 L 108 158 C 106 180, 110 200, 108 226 Z"/>
+                            <path class="trunk-branch" d="M100 175 C 100 165, 96 158, 90 152"/>
+                            <path class="trunk-branch" d="M100 170 C 100 160, 104 154, 110 148"/>
+                        </g>
+                        <g class="t-canopy">
+                            <circle class="canopy c1" cx="100" cy="118" r="46"/>
+                            <circle class="canopy c2" cx="66" cy="138" r="26"/>
+                            <circle class="canopy c3" cx="134" cy="138" r="26"/>
+                            <circle class="canopy c4" cx="84" cy="98" r="24"/>
+                            <circle class="canopy c5" cx="118" cy="100" r="22"/>
+                        </g>
+                        <g class="t-flowers">
+                            <circle class="flower f1" cx="72" cy="120" r="4"/>
+                            <circle class="flower f2" cx="128" cy="112" r="4"/>
+                            <circle class="flower f3" cx="100" cy="88" r="4"/>
+                            <circle class="flower f4" cx="146" cy="132" r="4"/>
+                            <circle class="flower f5" cx="56" cy="140" r="4"/>
+                            <circle class="flower f6" cx="112" cy="140" r="4"/>
+                        </g>
+                        <g class="t-hearts">
+                            <path class="tree-heart h1" d="M62 92 c-4-7-14-5-14 2 c0 6 8 10 14 14 c6-4 14-8 14-14 c0-7-10-9-14-2Z"/>
+                            <path class="tree-heart h2" d="M142 96 c-4-7-14-5-14 2 c0 6 8 10 14 14 c6-4 14-8 14-14 c0-7-10-9-14-2Z"/>
+                            <path class="tree-heart h3" d="M100 62 c-3.5-6-12-4.5-12 1.5 c0 5 7 8.5 12 12 c5-3.5 12-7 12-12 c0-6-8.5-7.5-12-1.5Z"/>
+                        </g>
+                    </svg>
+                    <span class="drop d1"></span>
+                    <span class="drop d2"></span>
+                    <span class="drop d3"></span>
+                    <p class="tree-message" id="tree-message"></p>
+                </div>
+
+                <div class="tree-stats">
+                    <div class="tree-stat">
+                        <span class="tree-stat-value" id="tree-waterings">0</span>
+                        <span class="tree-stat-label">arrosages</span>
+                    </div>
+                    <div class="tree-stat">
+                        <span class="tree-stat-value" id="tree-next">—</span>
+                        <span class="tree-stat-label">prochain arrosage</span>
+                    </div>
+                </div>
+
+                <div class="tree-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="tree-progress" aria-label="Progression vers le prochain arrosage">
+                    <div class="tree-progress-fill" id="tree-progress-fill"></div>
+                </div>
+
+                <button id="water-tree-btn" class="btn-gold" type="button">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-sprout"/></svg>
+                    Arroser notre arbre
+                </button>
+                <p class="tree-hint" id="tree-hint" aria-live="polite"></p>
+            </div>
+
+            <div class="tree-actions">
+                <button id="tree-to-distance-btn" class="btn-gold btn-secondary">
+                    Nous, à distance <svg class="icon" aria-hidden="true"><use href="#icon-globe"/></svg>
+                </button>
+                <button id="tree-to-surprise-btn" class="btn-gold">
+                    Découvrir la surprise <svg class="icon" aria-hidden="true"><use href="#icon-gift"/></svg>
+                </button>
+                <button id="tree-to-home-btn" class="btn-gold btn-secondary">
+                    Revenir à l'accueil <svg class="icon" aria-hidden="true"><use href="#icon-home"/></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Surprise finale -->
+    <section id="page-surprise" class="page">
+        <div class="surprise-container">
+            <div id="gift-box" class="gift-box" role="button" tabindex="0" aria-label="Ouvrir le cadeau">
+                <div class="gift-lid">
+                    <span class="gift-ribbon-v"></span>
+                    <span class="gift-ribbon-h"></span>
+                    <span class="gift-bow" aria-hidden="true">
+                        <span class="gift-loop gift-loop-left"></span>
+                        <span class="gift-loop gift-loop-right"></span>
+                        <span class="gift-knot"></span>
+                    </span>
+                </div>
+                <div class="gift-body">
+                    <span class="gift-ribbon-v"></span>
+                    <span class="gift-ribbon-h"></span>
+                </div>
+            </div>
+
+            <p id="surprise-instruction" class="surprise-instruction hidden">
+                Ouvre ton cadeau, Chouchou <svg class="icon" aria-hidden="true"><use href="#icon-heart"/></svg>
+            </p>
+
+            <div id="surprise-content" class="surprise-content hidden">
+                <div class="heart-large"><svg class="icon icon-xxl" aria-hidden="true"><use href="#icon-heart"/></svg></div>
+                
+                <div class="final-letter">
+                    <h1>Avant que tu partes, Chouchou…</h1>
+
+                    <p>Mon Amour,</p>
+                    <p>Tu es arrivée au bout de ce petit voyage, et j'espère sincèrement que tu as aimé découvrir chacune de ces pages.</p>
+                    <p>J'ai voulu rassembler ici quelques souvenirs, des pensées et des mots que je voulais prendre le temps de t'écrire. Ce site est une petite attention que j'ai imaginée et construite pour toi, avec l'envie de te faire sourire et de te laisser un souvenir que tu pourras retrouver même longtemps après ton anniversaire.</p>
+                    <p>En préparant tout ça, je me suis rendu compte du chemin parcouru depuis nos débuts. Il y a eu des moments simples, des surprises, des rires, des découvertes et aussi des moments où la distance s'est fait sentir.</p>
+                    <p>Je sais que nous avons encore beaucoup à apprendre l'un sur l'autre. Nous avons des choses à découvrir, des projets à imaginer et des étapes à franchir. Je ne prétends pas avoir toutes les réponses, mais je souhaite qu'on continue à avancer avec sincérité, respect et confiance.</p>
+                    <p>Pour ton anniversaire, je te souhaite avant tout d'être heureuse. Que cette nouvelle année t'apporte la santé, la réussite, la paix et toutes ces belles choses que tu mérites.</p>
+                    <p>Merci d'être entrée dans ma vie et d'en faire partie aujourd'hui.</p>
+                    <p>Et si un jour tu reviens sur ce site, j'espère que tu retrouveras le sourire en repensant à cette petite surprise que j'ai préparée spécialement pour toi.</p>
+                    <p><strong>Joyeux anniversaire, Jeanne. Joyeux anniversaire, mon Chouchou. ❤️</strong></p>
+                    <p>Je t'aime.</p>
+                    <p class="letter-signature">Ton amoureux.</p>
+                </div>
+
+                <div class="surprise-extras">
+                    <div class="extra-card compliment-card">
+                        <h3>Un compliment pour toi</h3>
+                        <p class="extra-sub">Besoin d'un boost ? Clique pour en recevoir un.</p>
+                        <p id="compliment-text" class="compliment-text">Tu es mon rayon de soleil, même à des kilomètres.</p>
+                        <button id="compliment-btn" class="btn-gold btn-secondary" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-heart"/></svg>Nouveau compliment</button>
+                    </div>
+                </div>
+
+                <div class="surprise-final-message">
+                    <p>Ce n'est pas la fin de notre histoire. C'est simplement une page que j'ai voulu t'offrir.</p>
+                </div>
+
+                <div class="surprise-actions">
+                    <button id="replay-timeline-btn" class="btn-gold btn-secondary">
+                        Revoir notre histoire
+                    </button>
+                    <button id="replay-letter-btn" class="btn-gold btn-secondary">
+                        Relire la grande lettre
+                    </button>
+                    <button id="surprise-to-letters-btn" class="btn-gold btn-secondary">
+                        Voir les petites lettres <svg class="icon" aria-hidden="true"><use href="#icon-mail"/></svg>
+                    </button>
+                    <button id="go-home-btn" class="btn-gold">
+                        Revenir à l'accueil <svg class="icon" aria-hidden="true"><use href="#icon-home"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fenêtre des lettres -->
+    <div id="letter-modal" class="modal">
+        <div class="modal-content letter-modal-content">
+            <button class="modal-close">&times;</button>
+            <div id="letter-modal-body" class="letter-modal-body">
+            </div>
+        </div>
+    </div>
+
+    <!-- Visionneuse de la galerie -->
+    <div id="lightbox" class="lightbox">
+        <button class="lightbox-close">&times;</button>
+        <button class="lightbox-prev">&#10094;</button>
+        <button class="lightbox-next">&#10095;</button>
+        <div class="lightbox-content">
+            <img id="lightbox-image" src="" alt="">
+            <p id="lightbox-caption" class="lightbox-caption"></p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/lock.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/countdown.js"></script>
+    <script src="js/music.js"></script>
+    <script src="js/timeline.js"></script>
+    <script src="js/letters.js"></script>
+    <script src="js/gallery.js"></script>
+    <script src="js/quiz.js"></script>
+    <script src="js/questions.js"></script>
+    <script src="js/surprise.js"></script>
+    <script src="js/offlinemap.js"></script>
+    <script src="js/distance.js"></script>
+    <script src="js/tree.js"></script>
+    <script src="js/pdf.js"></script>
+    <script src="js/features.js"></script>
+</body>
+</html>

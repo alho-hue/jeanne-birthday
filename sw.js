@@ -1,5 +1,5 @@
 // Petit service worker : met le site en cache pour qu'il s'ouvre même sans réseau.
-const CACHE_NAME = 'jeanne-site-v3';
+const CACHE_NAME = 'jeanne-site-v4';
 const PRECACHE = [
     './',
     './index.html',
